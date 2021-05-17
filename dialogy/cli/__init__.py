@@ -11,7 +11,7 @@ This module exposes a command line utility to create project scaffolding. This c
     make lint
 
 Usage:
-  __init__.py create <project> <template> [--namespace=<namespace>]
+  __init__.py create <project> <template> [--namespace=<namespace>] [--local]
   __init__.py create <project>
 
 Options:
@@ -24,6 +24,9 @@ Options:
 
     --namespace=<namespace>
         The version of the dataset, model, metrics to use.
+
+    --local
+        a boolean, if True indicates the template is present locally.
 
     -h --help
         Show this screen.
@@ -44,6 +47,7 @@ def new_project(
     destination_path: str,
     template: str = "dialogy-template-simple-transformers",
     namespace: str = "vernacular-ai",
+    is_local: bool = False
 ) -> None:
     """
     Create a new project using scaffolding from an existing template.
@@ -68,7 +72,10 @@ def new_project(
         log.error("There are files on the destination path. Aborting !")
         return None
 
-    copy(f"gh:{namespace}/{template}.git", destination_path)
+    if is_local:
+        copy(template, destination_path)
+    else:
+        copy(f"gh:{namespace}/{template}.git", destination_path)
     return None
 
 
@@ -80,6 +87,7 @@ def main() -> None:
     project_name = args["<project>"]
     template_name = args["<template>"]
     namespace = args["--namespace"]
+    is_local = args["--local"]
 
-    template_name, namespace = canonicalize_project_name(template_name, namespace)
+    template_name, namespace = canonicalize_project_name(template_name, is_local)
     new_project(project_name, template_name, namespace)

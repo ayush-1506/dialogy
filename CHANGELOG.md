@@ -3,6 +3,7 @@
 - [x] feat: spacy, pattern entity parsing from list support.
 - [x] refactor: Plugin class to prevent repeated code in subclasses.
 - [x] refactor: @debug -> @dbg to prevent name collisions.
+- [ ] add: local template support
 
 # 0.5.5
 
